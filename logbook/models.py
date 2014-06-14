@@ -3,30 +3,57 @@ from django.db import models
 class Company(models.Model):
     name = models.CharField(max_length=200)
 
+    def __str__(self):
+        return self.name
+
 class Person(models.Model):
     name = models.CharField(max_length=200)
     firstname = models.CharField(max_length=200)
     company = models.ForeignKey(Company)
 
+    def __str__(self):
+        return self.name
+
 class Project(models.Model):
     name = models.CharField(max_length=200)
     company = models.ForeignKey(Company)
 
+    def __str__(self):
+        return self.name
+
 class Tag(models.Model):
     name = models.CharField(max_length=200)
 
+    def __str__(self):
+        return self.name
+
 class Event(models.Model):
     EVENT_TYPES = (
-        (1, 'todo'),
+        (1, 'meeting'),
         (2, 'call'),
+        (3, 'task'),
+        (4, 'note')
     )
 
-    description = models.CharField(max_length=200)
+    title = models.CharField(max_length=200)
+    description = models.TextField()
     eventType =  models.IntegerField(choices=EVENT_TYPES)
     entryDate = models.DateTimeField()
-    dueDate = models.DateTimeField(blank=True)
-    person = models.ForeignKey(Person, blank=True)
-    company = models.ForeignKey(Company, blank=True)
-    project = models.ForeignKey(Project, blank=True)
-    tag = models.ForeignKey(Tag, blank=True)
+    dueDate = models.DateTimeField(null=True, blank=True)
+    person = models.ForeignKey(Person, null=True, blank=True)
+    company = models.ForeignKey(Company, null=True, blank=True)
+    project = models.ForeignKey(Project, null=True, blank=True)
+    tag = models.ManyToManyField(Tag, null=True, blank=True)
 
+    def __str__(self):
+        return u'%s' % (self.description)
+
+    def get_eventType_css(self):
+        LABELS = [
+            'primary',
+            'success',
+            'warning',
+            'info'
+        ]
+
+        return LABELS[self.eventType-1]

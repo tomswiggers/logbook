@@ -7,7 +7,7 @@ from logbook.models import Event
 def index(request):
     template = loader.get_template('index.html')
 
-    events = Event.objects.order_by('Company')
+    events = Event.objects.order_by('entryDate').reverse()
 
     context = RequestContext(request, {
         'events': events,
