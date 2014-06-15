@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  {% for company in companies %}
+    <div class="page-header">
+      <h2>
+        {{ company.name }}
+      </h2>
+    </div>
+
+    {% for project in company.projects.all %}
+      <h3>{{ project.name }}</h3>
+      {% include 'events.html' with events=project.events.all %}
+    {% endfor %}
+
+  {% endfor %}
+
+{% endblock %}

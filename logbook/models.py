@@ -3,6 +3,9 @@ from django.db import models
 class Company(models.Model):
     name = models.CharField(max_length=200)
 
+    class Meta:
+        ordering = ['name']
+
     def __str__(self):
         return self.name
 
@@ -16,7 +19,10 @@ class Person(models.Model):
 
 class Project(models.Model):
     name = models.CharField(max_length=200)
-    company = models.ForeignKey(Company)
+    company = models.ForeignKey(Company, related_name='projects')
+
+    class Meta:
+        ordering = ["name"]
 
     def __str__(self):
         return self.name
@@ -42,7 +48,7 @@ class Event(models.Model):
     dueDate = models.DateTimeField(null=True, blank=True)
     person = models.ForeignKey(Person, null=True, blank=True)
     company = models.ForeignKey(Company, null=True, blank=True)
-    project = models.ForeignKey(Project, null=True, blank=True)
+    project = models.ForeignKey(Project, related_name='events', null=True, blank=True)
     tag = models.ManyToManyField(Tag, null=True, blank=True)
 
     def __str__(self):
