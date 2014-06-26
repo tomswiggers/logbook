@@ -1,14 +1,29 @@
 {% for event in events %}
-  <div class="page-header">
-      <h4>
-      {{ event.title }}
-      <small><i>{{ event.entryDate | date:"Y-m-d H:i:s" }}</i></small>
-      <small>{{ event.company }}</small>
+  <p>
+      {{ event.entryDate | date:"Y-m-d H:i:s" }}
+      <strong>{{ event.company }}</strong>
       -
-      <small>{{ event.project }}</small>
-      <span class="label label-{{ event.get_eventType_css }}">{{ event.get_eventType_display }}</span>
-    </h4>
+      <strong>{{ event.project }}</strong>
+      <span>{{ event.description }}</span>
+      <span class="pull-right">
+        <span class="label label-{{ event.get_eventType_css }}">{{ event.get_eventType_display }}</span>
+        <a href="#" class="label label-primary" data-toggle="modal" data-target="#event-{{ event.id }}"><span class="glyphicon glyphicon-plus"></span></a>
+      </span>
+  </p>
+
+  <div class="modal fade bs-example-modal-lg" id="event-{{ event.id }}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title" id="myLargeModalLabel">{{ event.company }} - {{ event.project }}</h4>
+        </div>
+        <div class="modal-body">
+          <i>{{ event.entryDate | date:"Y-m-d H:i:s" }}</i>
+          <p>{{ event.description }}</p>
+          <i>{% for tag in event.tag.all %} {{ tag }} {% endfor%}</i>
+        </div>
+      </div>
+    </div>
   </div>
-  <p>{{ event.description }}</p>
-  <i>{% for tag in event.tag.all %} {{ tag }} {% endfor%}</i>
 {% endfor %}
